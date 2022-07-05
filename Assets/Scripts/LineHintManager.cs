@@ -6,13 +6,13 @@ using UnityEngine.Assertions;
 public class LineHintManager : MonoBehaviour
 {
     public static LineHintManager Instance;
+    LineRenderer lineRenderer;
+    Material mat;
+    Transform origin;
+    Transform target;
     bool isActive;
     const float scrollSpeed = 1.5f;
     float offset;
-    [SerializeField] Material mat;
-    [SerializeField] Transform origin;
-    [SerializeField] Transform target;
-    LineRenderer lineRenderer;
 
     void Awake()
     {
@@ -29,27 +29,35 @@ public class LineHintManager : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         Assert.IsNotNull(lineRenderer);
-        Assert.AreEqual(lineRenderer.positionCount, 2);
+        mat = lineRenderer.materials[0];
+        Assert.IsNotNull(mat);
         isActive = false;
+        origin = target = null;
     }
 
-    private void OnEnable() => SetTextureOffset(Vector2.zero);
-    private void OnDisable() => SetTextureOffset(Vector2.zero);
+    private void Reset()
+    {
+        isActive = false;
+        origin = target = null;
+        SetTextureOffset(Vector2.zero);
+        SetTextureScale(0);
+    }
+
+    private void OnEnable() => Reset();
+    private void OnDisable() => Reset();
 
     void Update()
     {
         if (!isActive) return;
         offset += (Time.deltaTime * scrollSpeed);
         SetTextureOffset(-Vector2.right * offset);
+        SetTextureScale(Vector3.Distance(origin.position, target.position));
         lineRenderer.SetPosition(0, origin.transform.position);
         lineRenderer.SetPosition(1, target.transform.position);
-
-        float dist = Vector3.Distance(origin.position, target.position);
-        Debug.Log(dist);
-        mat.SetTextureScale("_MainTex", new Vector2(dist, 1));
     }
 
     private void SetTextureOffset(Vector2 value) => mat.SetTextureOffset("_MainTex", value);
+    private void SetTextureScale(float value) => mat.SetTextureScale("_MainTex", new Vector2(value, 1));
 
     public void ShowHintLine(Transform origin, Transform target)
     {
