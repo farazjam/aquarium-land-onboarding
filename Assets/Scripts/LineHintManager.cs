@@ -34,6 +34,7 @@ public class LineHintManager : MonoBehaviour
         lineRenderer.SetPosition(1, target.transform.position);
 
         float dist = Vector3.Distance(origin.position, target.position);
+        Debug.Log(dist);
         mat.SetTextureScale("_MainTex", new Vector2(dist, 1));
     }
 
