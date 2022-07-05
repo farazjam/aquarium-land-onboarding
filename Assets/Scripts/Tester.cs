@@ -18,7 +18,7 @@ public class Tester : MonoBehaviour
     private void OnGUI()
     {
         GUI.skin.label.fontSize = 36;
-        GUI.skin.button.fontSize = 36;
+        GUI.skin.button.fontSize = 36; 
         if (GUILayout.Button("Show Hint Line"))  LineHintManager.Instance.ShowHintLine(origin.transform, target.transform);
     }
 
