@@ -16,6 +16,17 @@ public class LineHintManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null) Destroy(this.gameObject);
+        else
+        {
+            Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+            Init();
+        }
+    }
+
+    private void Init()
+    {
         lineRenderer = GetComponent<LineRenderer>();
         Assert.IsNotNull(lineRenderer);
         Assert.AreEqual(lineRenderer.positionCount, 2);
@@ -43,15 +54,9 @@ public class LineHintManager : MonoBehaviour
     public void ShowHintLine(Transform origin, Transform target)
     {
         if (origin == null || target == null) return;
+        if (origin.gameObject.GetInstanceID() == target.gameObject.GetInstanceID()) return;
         this.origin = origin;
         this.target = target;
         isActive = true;
-    }
-
-    private void OnGUI()
-    {
-        GUI.skin.label.fontSize = 36;
-        GUI.skin.button.fontSize = 36;
-        if (GUILayout.Button("A to B")) ShowHintLine(GameObject.Find("Cube A").transform, GameObject.Find("Cube B").transform);
     }
 }
