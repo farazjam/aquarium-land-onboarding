@@ -13,6 +13,7 @@ public class Test1 : MonoBehaviour
     {
         mat = GetComponent<MeshRenderer>().materials[0];
         Assert.IsNotNull(mat);
+        mat.SetTextureScale("_MainTex", new Vector2(1, 5));
     }
 
     private void OnEnable() => SetTextureOffset(Vector2.zero);

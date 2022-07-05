@@ -12,7 +12,6 @@ public class Test2 : MonoBehaviour
     [SerializeField] Transform destination;
     LineRenderer lineRenderer;
 
-
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
@@ -29,6 +28,8 @@ public class Test2 : MonoBehaviour
     {
         /*offset += (Time.deltaTime * scrollSpeed);
         SetTextureOffset(-Vector2.left * offset);*/
+        float dist = Vector3.Distance(source.position, destination.position);
+        mat.SetTextureScale("_MainTex", new Vector2(dist, 1));
         lineRenderer.SetPosition(0, source.transform.position);
         lineRenderer.SetPosition(1, destination.transform.position);
 
